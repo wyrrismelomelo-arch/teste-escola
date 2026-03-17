@@ -56,3 +56,7 @@ button {
 .page {
     padding: 20px;
 }
+#cadastro {
+    background: #222;
+    color: white;
+}
