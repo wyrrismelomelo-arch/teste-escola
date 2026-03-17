@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Sistema Escolar PRO</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="container" id="login">
+  <h2>🎓 Sistema Escolar</h2>
+  <input type="text" id="loginUser" placeholder="Usuário">
+  <input type="password" id="loginPass" placeholder="Senha">
+  <button onclick="login()">Entrar</button>
+  <a onclick="mostrarCadastro()">Criar conta</a>
+</div>
+
+<!-- CADASTRO -->
+<div class="container hidden" id="cadastro">
+  <h2>Criar Conta</h2>
+  <input type="text" id="newUser" placeholder="Usuário">
+  <input type="password" id="newPass" placeholder="Senha">
+  <select id="tipoUser">
+    <option value="aluno">Aluno</option>
+    <option value="professor">Professor</option>
+  </select>
+  <button onclick="cadastrar()">Cadastrar</button>
+  <a onclick="mostrarLogin()">Voltar</a>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="hidden">
+  
+  <div class="sidebar">
+    <h3>📚 Menu</h3>
+    <button onclick="mostrarPagina('home')">🏠 Início</button>
+    <button onclick="mostrarPagina('notas')">📊 Notas</button>
+    <button onclick="mostrarPagina('usuarios')">👥 Usuários</button>
+    <button onclick="logout()">🚪 Sair</button>
+  </div>
+
+  <div class="content">
+
+    <div id="home" class="page">
+      <h2>Bem-vindo</h2>
+      <p id="usuarioLogado"></p>
+    </div>
+
+    <div id="notas" class="page hidden">
+      <h2>Notas</h2>
+      <input type="text" id="novaNota" placeholder="Digite uma nota">
+      <button onclick="addNota()">Adicionar</button>
+      <ul id="listaNotas"></ul>
+    </div>
+
+    <div id="usuarios" class="page hidden">
+      <h2>Usuários</h2>
+      <ul id="listaUsuarios"></ul>
+    </div>
+
+  </div>
+</div>
+
+<script src="./script.js"></script>
+</body>
+</html>
