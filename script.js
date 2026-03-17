@@ -1,90 +1,106 @@
-const loginDiv = document.getElementById("login");
-const cadastroDiv = document.getElementById("cadastro");
-const sistemaDiv = document.getElementById("sistema");
+document.addEventListener("DOMContentLoaded", function () {
 
-function mostrarCadastro() {
-    loginDiv.classList.add("hidden");
-    cadastroDiv.classList.remove("hidden");
-}
+    const loginDiv = document.getElementById("login");
+    const cadastroDiv = document.getElementById("cadastro");
+    const sistemaDiv = document.getElementById("sistema");
 
-function mostrarLogin() {
-    cadastroDiv.classList.add("hidden");
-    loginDiv.classList.remove("hidden");
-}
-
-function cadastrar() {
-    const user = document.getElementById("newUser").value;
-    const pass = document.getElementById("newPass").value;
-    const tipo = document.getElementById("tipoUser").value;
-
-    if (!user || !pass) {
-        alert("Preencha tudo!");
-        return;
+    // MOSTRAR CADASTRO
+    window.mostrarCadastro = function () {
+        loginDiv.classList.add("hidden");
+        cadastroDiv.classList.remove("hidden");
     }
 
-    let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
-
-    usuarios.push({ user, pass, tipo });
-
-    localStorage.setItem("usuarios", JSON.stringify(usuarios));
-
-    alert("Conta criada!");
-
-    mostrarLogin();
-}
-
-function login() {
-    const user = document.getElementById("loginUser").value;
-    const pass = document.getElementById("loginPass").value;
-
-    let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
-
-    const encontrado = usuarios.find(u => u.user === user && u.pass === pass);
-
-    if (!encontrado) {
-        alert("Usuário inválido!");
-        return;
+    // VOLTAR LOGIN
+    window.mostrarLogin = function () {
+        cadastroDiv.classList.add("hidden");
+        loginDiv.classList.remove("hidden");
     }
 
-    localStorage.setItem("logado", JSON.stringify(encontrado));
+    // CADASTRAR
+    window.cadastrar = function () {
+        const user = document.getElementById("newUser").value;
+        const pass = document.getElementById("newPass").value;
+        const tipo = document.getElementById("tipoUser")?.value || "aluno";
 
-    loginDiv.classList.add("hidden");
-    sistemaDiv.classList.remove("hidden");
+        if (!user || !pass) {
+            alert("Preencha tudo!");
+            return;
+        }
 
-    document.getElementById("usuarioLogado").innerText = user;
+        let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
 
-    carregarUsuarios();
-}
+        usuarios.push({ user, pass, tipo });
 
-function logout() {
-    localStorage.removeItem("logado");
-    sistemaDiv.classList.add("hidden");
-    loginDiv.classList.remove("hidden");
-}
+        localStorage.setItem("usuarios", JSON.stringify(usuarios));
 
-function mostrarPagina(pagina) {
-    document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
-    document.getElementById(pagina).classList.remove("hidden");
-}
+        alert("Conta criada!");
 
-function addNota() {
-    const nota = document.getElementById("novaNota").value;
+        mostrarLogin();
+    }
 
-    const li = document.createElement("li");
-    li.innerText = nota;
+    // LOGIN
+    window.login = function () {
+        const user = document.getElementById("loginUser").value;
+        const pass = document.getElementById("loginPass").value;
 
-    document.getElementById("listaNotas").appendChild(li);
-}
+        let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
 
-function carregarUsuarios() {
-    let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
-    const lista = document.getElementById("listaUsuarios");
+        const encontrado = usuarios.find(u => u.user === user && u.pass === pass);
 
-    lista.innerHTML = "";
+        if (!encontrado) {
+            alert("Usuário inválido!");
+            return;
+        }
 
-    usuarios.forEach(u => {
+        localStorage.setItem("logado", JSON.stringify(encontrado));
+
+        loginDiv.classList.add("hidden");
+        sistemaDiv.classList.remove("hidden");
+
+        document.getElementById("usuarioLogado").innerText = user;
+
+        carregarUsuarios();
+    }
+
+    // LOGOUT
+    window.logout = function () {
+        localStorage.removeItem("logado");
+        sistemaDiv.classList.add("hidden");
+        loginDiv.classList.remove("hidden");
+    }
+
+    // TROCAR PÁGINA
+    window.mostrarPagina = function (pagina) {
+        document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
+        document.getElementById(pagina).classList.remove("hidden");
+    }
+
+    // ADICIONAR NOTA
+    window.addNota = function () {
+        const nota = document.getElementById("novaNota").value;
+
+        if (!nota) return;
+
         const li = document.createElement("li");
-        li.innerText = `${u.user} (${u.tipo})`;
-        lista.appendChild(li);
-    });
-}
+        li.innerText = nota;
+
+        document.getElementById("listaNotas").appendChild(li);
+    }
+
+    // LISTAR USUÁRIOS
+    function carregarUsuarios() {
+        let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+        const lista = document.getElementById("listaUsuarios");
+
+        if (!lista) return;
+
+        lista.innerHTML = "";
+
+        usuarios.forEach(u => {
+            const li = document.createElement("li");
+            li.innerText = `${u.user} (${u.tipo})`;
+            lista.appendChild(li);
+        });
+    }
+
+});
