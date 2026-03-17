@@ -1,3 +1,6 @@
+const login = document.getElementById("login")
+const cadastro = document.getElementById("cadastro")
+
 function mostrarCadastro() {
   login.classList.add("hidden");
   cadastro.classList.remove("hidden");
