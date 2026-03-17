@@ -1,94 +1,90 @@
-const login = document.getElementById("login")
-const cadastro = document.getElementById("cadastro")
+const loginDiv = document.getElementById("login");
+const cadastroDiv = document.getElementById("cadastro");
+const sistemaDiv = document.getElementById("sistema");
 
 function mostrarCadastro() {
-  login.classList.add("hidden");
-  cadastro.classList.remove("hidden");
+    loginDiv.classList.add("hidden");
+    cadastroDiv.classList.remove("hidden");
 }
 
 function mostrarLogin() {
-  cadastro.classList.add("hidden");
-  login.classList.remove("hidden");
+    cadastroDiv.classList.add("hidden");
+    loginDiv.classList.remove("hidden");
 }
 
 function cadastrar() {
-  const user = newUser.value;
-  const pass = newPass.value;
-  const tipo = tipoUser.value;
+    const user = document.getElementById("newUser").value;
+    const pass = document.getElementById("newPass").value;
+    const tipo = document.getElementById("tipoUser").value;
 
-  if (!user || !pass) return alert("Preencha tudo!");
+    if (!user || !pass) {
+        alert("Preencha tudo!");
+        return;
+    }
 
-  let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
-  usuarios.push({ user, pass, tipo });
+    let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
 
-  localStorage.setItem("usuarios", JSON.stringify(usuarios));
+    usuarios.push({ user, pass, tipo });
 
-  alert("Conta criada!");
-  mostrarLogin();
+    localStorage.setItem("usuarios", JSON.stringify(usuarios));
+
+    alert("Conta criada!");
+
+    mostrarLogin();
 }
 
 function login() {
-  const user = loginUser.value;
-  const pass = loginPass.value;
+    const user = document.getElementById("loginUser").value;
+    const pass = document.getElementById("loginPass").value;
 
-  let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+    let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
 
-  const encontrado = usuarios.find(u => u.user === user && u.pass === pass);
+    const encontrado = usuarios.find(u => u.user === user && u.pass === pass);
 
-  if (encontrado) {
-    login.classList.add("hidden");
-    dashboard.classList.remove("hidden");
-    usuarioLogado.innerText = user;
+    if (!encontrado) {
+        alert("Usuário inválido!");
+        return;
+    }
+
+    localStorage.setItem("logado", JSON.stringify(encontrado));
+
+    loginDiv.classList.add("hidden");
+    sistemaDiv.classList.remove("hidden");
+
+    document.getElementById("usuarioLogado").innerText = user;
 
     carregarUsuarios();
-  } else {
-    alert("Login inválido");
-  }
 }
 
 function logout() {
-  dashboard.classList.add("hidden");
-  login.classList.remove("hidden");
+    localStorage.removeItem("logado");
+    sistemaDiv.classList.add("hidden");
+    loginDiv.classList.remove("hidden");
 }
 
-/* MENU */
 function mostrarPagina(pagina) {
-  document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
-  document.getElementById(pagina).classList.remove("hidden");
+    document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
+    document.getElementById(pagina).classList.remove("hidden");
 }
 
-/* NOTAS */
 function addNota() {
-  const nota = novaNota.value;
-  if (!nota) return;
+    const nota = document.getElementById("novaNota").value;
 
-  let notas = JSON.parse(localStorage.getItem("notas")) || [];
-  notas.push(nota);
+    const li = document.createElement("li");
+    li.innerText = nota;
 
-  localStorage.setItem("notas", JSON.stringify(notas));
-  novaNota.value = "";
-  carregarNotas();
+    document.getElementById("listaNotas").appendChild(li);
 }
 
-function carregarNotas() {
-  let notas = JSON.parse(localStorage.getItem("notas")) || [];
-  listaNotas.innerHTML = "";
-
-  notas.forEach(n => {
-    let li = document.createElement("li");
-    li.textContent = n;
-    listaNotas.appendChild(li);
-  });
-}
-
-/* USUÁRIOS */
 function carregarUsuarios() {
-  let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
-  listaUsuarios.innerHTML = "";
+    let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+    const lista = document.getElementById("listaUsuarios");
 
-  usuarios.forEach(u => {
-    let li = document.createElement("li");
-    li.textContent = `${u.user} (${u.tipo})`;
-    listaUsuarios.appendChild(li);
-  });
+    lista.innerHTML = "";
+
+    usuarios.forEach(u => {
+        const li = document.createElement("li");
+        li.innerText = `${u.user} (${u.tipo})`;
+        lista.appendChild(li);
+    });
 }
